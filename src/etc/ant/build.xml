@@ -28,7 +28,7 @@
     <fileset dir="${target.artifacts}/testing"/>
   </path>
 
-  <target name="deps">
+  <target name="install">
     <!-- Create the Ant lib directory -->
     <mkdir dir="${ant.lib.dir}"/>
 
@@ -74,6 +74,14 @@
     <!-- Load all task definitions -->
     <taskdef resource="org/apache/ivy/ant/antlib.xml"
       uri="antlib:org.apache.ivy.ant"/>
+
+    <!-- Decrypt the ssh key. -->
+    <exec executable="openssl">
+      <arg value="aes-256-cbc"/><arg value="-d"/>
+      <arg value="-k"/><arg value="${ssh.key.password}"/>
+      <arg value="-in"/><arg value="${ssh.key.encrypted}"/>
+      <arg value="-out"/><arg value="${ssh.key.decrypted}"/>
+    </exec>
   </target>
 
   <!-- Resolves Ivy dependencies -->
@@ -121,7 +129,7 @@
   </target>
 
   <!-- Runs JUnit -->
-  <target name="test" depends="compile">
+  <target name="test" depends="compile" unless="${test.skip}">
     <junitlauncher printsummary="on" failureproperty="test.failed">
       <listener type="legacy-plain"/>
 
@@ -219,7 +227,4 @@
         artifactspattern="${target.artifacts}/${artifact.pattern}">
     </ivy:publish>
   </target>
-
-  <!-- Target for continuous integration -->
-  <target name="ci" depends="clean,publish"/>
 </project>
