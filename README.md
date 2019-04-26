@@ -1,23 +1,23 @@
 [![GitHub version](https://img.shields.io/github/tag/Nepherte/bing-proxy.svg?label=latest)](https://github.com/Nepherte/bing-proxy/releases/latest)
-[![Build Status](https://img.shields.io/travis/com/Nepherte/bing-proxy/master.svg)](https://travis-ci.com/Nepherte/bing-proxy)
+[![Build Status](https://img.shields.io/travis/com/Nepherte/bing-proxy/develop.svg)](https://travis-ci.com/Nepherte/bing-proxy)
 
 **bing-proxy** is a Java proxy servlet for the retrieval of Bing™ Maps imagery 
 metadata. The returned imagery metadata includes the urls and dimensions for
 imagery tiles, ranges of zoom levels, and imagery vintage information.
 
-The latest version is 1.0.0, released on **April 26, 2019**:
+The latest version is SNAPSHOT:
 
-- [bing-proxy-1.0.0.jar](https://ivy.nepherte.be/be.nepherte/bing-proxy/1.0.0/bing-proxy-1.0.0.jar)
-- [bing-proxy-1.0.0.war](https://ivy.nepherte.be/be.nepherte/bing-proxy/1.0.0/bing-proxy-1.0.0.war)
-- [bing-proxy-1.0.0-javadoc.jar](https://ivy.nepherte.be/be.nepherte/bing-proxy/1.0.0/bing-proxy-1.0.0-javadoc.jar)
-- [bing-proxy-1.0.0-sources.jar](https://ivy.nepherte.be/be.nepherte/bing-proxy/1.0.0/bing-proxy-1.0.0-sources.jar)
+- [bing-proxy-SNAPSHOT.jar](https://ivy.nepherte.be/be.nepherte/bing-proxy/SNAPSHOT/bing-proxy-SNAPSHOT.jar)
+- [bing-proxy-SNAPSHOT.war](https://ivy.nepherte.be/be.nepherte/bing-proxy/SNAPSHOT/bing-proxy-SNAPSHOT.war)
+- [bing-proxy-SNAPSHOT-javadoc.jar](https://ivy.nepherte.be/be.nepherte/bing-proxy/SNAPSHOT/bing-proxy-SNAPSHOT-javadoc.jar)
+- [bing-proxy-SNAPSHOT-sources.jar](https://ivy.nepherte.be/be.nepherte/bing-proxy/SNAPSHOT/bing-proxy-SNAPSHOT-sources.jar)
 
 
 Installation
 ------------
 Follow these steps for a stand-alone installation of the proxy servlet:
 
-1. [Download](https://ivy.nepherte.be/be.nepherte/bing-proxy/1.0.0/) the latest release of bing-proxy
+1. [Download](https://ivy.nepherte.be/be.nepherte/bing-proxy/SNAPSHOT/) the latest release of bing-proxy
 2. Deploy the war on your application server
 3. Insert your bing maps key in the [web.xml](#configuration)
 
