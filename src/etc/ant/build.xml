@@ -1,0 +1,230 @@
+<?xml version="1.0"?>
+<project name="Bing Proxy"
+  default="package" basedir="../../../"
+  xmlns:ivy="antlib:org.apache.ivy.ant">
+
+  <!-- Build script settings and dependencies -->
+  <property file="src/etc/ant/build.properties"/>
+  <property file="src/etc/ant/ant.properties"/>
+
+  <!-- Location for additional Ant libraries -->
+  <property name="ant.lib.dir" value="${user.home}/.ant/lib"/>
+
+  <!-- Classpath to compile main code -->
+  <path id="compile.classpath">
+    <fileset dir="${target.artifacts}/compile"/>
+  </path>
+
+  <path id="runtime.classpath">
+    <fileset dir="${target.artifacts}/runtime"/>
+  </path>
+
+  <path id="provided.classpath">
+    <fileset dir="${target.artifacts}/provided"/>
+  </path>
+
+  <!-- Classpath to compile test code -->
+  <path id="testing.classpath">
+    <fileset dir="${target.artifacts}/testing"/>
+  </path>
+
+  <target name="install">
+    <!-- Create the Ant lib directory -->
+    <mkdir dir="${ant.lib.dir}"/>
+
+    <!-- Retrieve and download dependencies -->
+    <get src="${apache-ivy}" dest="${ant.lib.dir}" usetimestamp="true"/>
+    <get src="${jcraft-jsch}" dest="${ant.lib.dir}" usetimestamp="true"/>
+    <get src="${commons-log}" dest="${ant.lib.dir}" usetimestamp="true"/>
+
+    <get src="${opentest4j}" dest="${ant.lib.dir}" usetimestamp="true"/>
+    <get src="${apiguardian}" dest="${ant.lib.dir}" usetimestamp="true"/>
+    <get src="${junit-commons}" dest="${ant.lib.dir}" usetimestamp="true"/>
+    <get src="${junit-engine}" dest="${ant.lib.dir}" usetimestamp="true"/>
+    <get src="${junit-launcher}" dest="${ant.lib.dir}" usetimestamp="true"/>
+  </target>
+
+  <!-- Deletes generated directories -->
+  <target name="clean">
+    <delete dir="${target.classes}"/>
+    <delete dir="${target.testing}"/>
+    <delete dir="${target.javadoc}"/>
+    <delete dir="${target.reports}"/>
+    <delete dir="${target.artifacts}"/>
+  </target>
+
+  <!-- Initializes build -->
+  <target name="init">
+    <!-- Create source directories -->
+    <mkdir dir="${src.main.java}"/>
+    <mkdir dir="${src.test.java}"/>
+
+    <!-- Create target directories -->
+    <mkdir dir="${target.classes}"/>
+    <mkdir dir="${target.testing}"/>
+    <mkdir dir="${target.javadoc}"/>
+    <mkdir dir="${target.reports}"/>
+    <mkdir dir="${target.artifacts}"/>
+
+    <mkdir dir="${target.artifacts}/compile"/>
+    <mkdir dir="${target.artifacts}/runtime"/>
+    <mkdir dir="${target.artifacts}/provided"/>
+    <mkdir dir="${target.artifacts}/testing"/>
+
+    <!-- Load all task definitions -->
+    <taskdef resource="org/apache/ivy/ant/antlib.xml"
+      uri="antlib:org.apache.ivy.ant"/>
+
+    <!-- Decrypt the ssh key. -->
+    <exec executable="openssl">
+      <arg value="aes-256-cbc"/><arg value="-d"/>
+      <arg value="-k"/><arg value="${ssh.key.password}"/>
+      <arg value="-in"/><arg value="${ssh.key.encrypted}"/>
+      <arg value="-out"/><arg value="${ssh.key.decrypted}"/>
+    </exec>
+  </target>
+
+  <!-- Resolves Ivy dependencies -->
+  <target name="ivy" depends="init">
+    <ivy:configure file="${ivy.settings.file}"/>
+
+    <ivy:resolve file="${ivy.file}" type="jar"
+      conf="compile,runtime,testing,provided"/>
+
+    <ivy:retrieve conf="compile" type="jar"
+      pattern="${target.artifacts}/compile/[artifact]-[revision].[ext]"/>
+    <ivy:retrieve conf="runtime" type="jar"
+      pattern="${target.artifacts}/runtime/[artifact]-[revision].[ext]"/>
+    <ivy:retrieve conf="provided" type="jar"
+      pattern="${target.artifacts}/provided/[artifact]-[revision].[ext]"/>
+    <ivy:retrieve conf="testing" type="jar"
+      pattern="${target.artifacts}/testing/[artifact]-[revision].[ext]"/>
+  </target>
+
+  <!-- Compiles source code -->
+  <target name="compile" depends="init,ivy">
+
+    <!-- Compile production code -->
+    <javac includeantruntime="false" debug="true"
+      source="8" srcdir="${src.main.java}"
+      target="8" destdir="${target.classes}">
+
+      <classpath>
+        <path refid="compile.classpath"/>
+        <path refid="provided.classpath"/>
+      </classpath>
+    </javac>
+
+    <!-- Compile test code -->
+    <javac includeantruntime="false" debug="true"
+      source="8" srcdir="${src.test.java}"
+      target="8" destdir="${target.testing}">
+
+      <classpath>
+        <path location="${target.classes}"/>
+        <path refid="testing.classpath"/>
+        <path refid="provided.classpath"/>
+      </classpath>
+    </javac>
+  </target>
+
+  <!-- Runs JUnit -->
+  <target name="test" depends="compile" unless="${test.skip}">
+    <junitlauncher printsummary="on" failureproperty="test.failed">
+      <listener type="legacy-plain"/>
+
+      <classpath>
+        <path location="${target.classes}"/>
+        <path location="${target.testing}"/>
+      </classpath>
+      <classpath refid="compile.classpath"/>
+      <classpath refid="runtime.classpath"/>
+      <classpath refid="provided.classpath"/>
+      <classpath refid="testing.classpath"/>
+
+      <testclasses outputdir="${basedir}/${target.reports}">
+        <fileset dir="${basedir}/${target.testing}">
+          <include name="**/*Test.class"/>
+        </fileset>
+      </testclasses>
+    </junitlauncher>
+  </target>
+
+  <!-- Generates the javadoc api -->
+  <target name="javadoc" depends="init,ivy">
+    <javadoc
+      sourcepath="${src.main.java}"
+      destdir="${target.javadoc}"
+      windowtitle="${ant.project.name}">
+
+      <classpath>
+        <path refid="compile.classpath"/>
+        <path refid="provided.classpath"/>
+      </classpath>
+
+      <!-- Include reference to the Oracle javadocs -->
+      <link href="http://docs.oracle.com/javase/8/docs/api"/>
+      <link href="http://docs.oracle.com/javaee/7/api/"/>
+    </javadoc>
+  </target>
+
+  <!-- Create the artifacts -->
+  <target name="package" depends="compile,test,javadoc">
+    <fail message="Abort: unit test(s) failed" if="test.failed"/>
+
+    <property name="manifest.file" value="${target.artifacts}/MANIFEST.MF"/>
+    <property name="artifact.id" value="${app.name}-${app.version}"/>
+
+    <!-- Manifest file -->
+    <manifest file="${manifest.file}">
+      <attribute name="Implementation-Vendor" value="${app.vendor}"/>
+      <attribute name="Implementation-Title" value="${app.name}"/>
+      <attribute name="Implementation-Version" value="${app.version}"/>
+    </manifest>
+
+    <!-- Production jar -->
+    <jar
+      destfile="${target.artifacts}/${artifact.id}.jar"
+      basedir="${target.classes}" manifest="${manifest.file}"/>
+
+    <!-- Source code jar -->
+    <jar
+      destfile="${target.artifacts}/${artifact.id}-sources.jar"
+      basedir="${src.main.java}" manifest="${manifest.file}"/>
+
+    <!-- Javadoc jar -->
+    <jar
+      destfile="${target.artifacts}/${artifact.id}-javadoc.jar"
+      basedir="${target.javadoc}" manifest="${manifest.file}"/>
+
+    <!-- Production war-->
+    <war
+      destfile="${target.artifacts}/${artifact.id}.war">
+
+      <webinf dir="${src.main.web}/WEB-INF"/>
+      <lib dir="${target.artifacts}">
+        <include name="${artifact.id}.jar"/>
+      </lib>
+    </war>
+  </target>
+
+  <!-- Publish artifacts on ftp server -->
+  <target name="publish" depends="package">
+    <condition property="status" value="integration" else="release">
+      <contains string="${app.version}" substring="SNAPSHOT"/>
+    </condition>
+
+    <condition property="overwrite" value="true" else="false">
+      <contains string="${app.version}" substring="SNAPSHOT"/>
+    </condition>
+
+    <property name="artifact.pattern"
+      value="[artifact]-[revision](-[classifier]).[ext]"/>
+
+    <ivy:publish
+        resolver="production" pubrevision="${app.version}"
+        status="${status}" overwrite="${overwrite}"
+        artifactspattern="${target.artifacts}/${artifact.pattern}">
+    </ivy:publish>
+  </target>
+</project>

@@ -1,0 +1,29 @@
+# Source language.
+language: java
+
+# Supported JDKs.
+jdk:
+  - oraclejdk8
+  - openjdk8
+
+# Cache Ivy stuff.
+cache:
+  directories:
+    - $HOME/.ivy2
+
+# Install tool chain.
+install:
+  - src/etc/travis/install-ant-libs.sh
+
+# Execute unit tests.
+script:
+  - src/etc/travis/run-unit-tests.sh
+
+# Deploy artifacts.
+jobs:
+  include:
+    - stage: deploy
+      jdk: openjdk8
+      if: tag is present or branch = develop
+      script:
+        - src/etc/travis/deploy-artifacts.sh

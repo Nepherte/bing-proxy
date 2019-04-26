@@ -1,0 +1,9 @@
+# IntelliJ
+.idea/
+
+# Secrets
+**/*.key
+
+# Generated
+out/
+target/
