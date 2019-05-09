@@ -4,7 +4,7 @@
 ## Builds need an up-to-date version to run tests written in JUnit 5 framework.
 
 # The version of Ant to install.
-ANT_VERSION="1.10.5"
+ANT_VERSION="1.10.6"
 
 # The mirror from which to download Ant.
 ANT_MIRROR="https://www.apache.org/dist/ant/binaries"
