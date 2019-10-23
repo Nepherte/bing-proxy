@@ -89,7 +89,8 @@ In the absence of this parameter, the servlet defaults to `Aerial`.
 
 #### Culture
 The `culture` parameter specifies the language and/or region to use. For an 
-exhaustive list of supported values, see [Supported culture codes](https://msdn.microsoft.com/en-us/library/hh441729.aspx).
+exhaustive list of supported values, see [Supported culture codes](
+https://docs.microsoft.com/en-us/bingmaps/rest-services/common-parameters-and-types/supported-culture-codes).
 In the absence of this parameter, the servlet defaults to `en-US`.
 
 #### Output
