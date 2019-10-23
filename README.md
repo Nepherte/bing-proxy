@@ -84,7 +84,8 @@ The proxy servlet supports HTTP GET requests. It accepts the optional parameters
 
 #### Map type
 The `mapType` parameter specifies the type of imagery for which you are 
-requesting metadata. Allowed values are `Aerial`, `AerialWithLabels` and `Road`.
+requesting metadata. For an exhaustive list of supported values, see [Supported map types](
+https://docs.microsoft.com/en-us/bingmaps/rest-services/imagery/get-imagery-metadata).
 In the absence of this parameter, the servlet defaults to `Aerial`.
 
 #### Culture
