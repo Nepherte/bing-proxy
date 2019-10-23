@@ -4,6 +4,7 @@ language: java
 # Supported JDKs.
 jdk:
   - openjdk8
+  - openjdk11
 
 # Cache Ivy stuff.
 cache:
