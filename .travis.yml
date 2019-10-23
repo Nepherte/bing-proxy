@@ -3,7 +3,6 @@ language: java
 
 # Supported JDKs.
 jdk:
-  - oraclejdk8
   - openjdk8
 
 # Cache Ivy stuff.
