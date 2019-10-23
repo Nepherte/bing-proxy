@@ -7,7 +7,7 @@
 ANT_VERSION="1.10.6"
 
 # The mirror from which to download Ant.
-ANT_MIRROR="https://www.apache.org/dist/ant/binaries"
+ANT_MIRROR="https://archive.apache.org/dist/ant/binaries"
 
 # The location in which to install Ant.
 ANT_INSTALLATION_DIR="${TRAVIS_BUILD_DIR}/bin"
