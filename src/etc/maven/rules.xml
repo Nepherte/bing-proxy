@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ruleset>
+  <ignoreVersions>
+    <!-- Ignore milestones-->
+    <ignoreVersion type="regex">(?i).*M(?:-?\d+)?</ignoreVersion>
+  </ignoreVersions>
+</ruleset>

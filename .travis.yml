@@ -9,11 +9,7 @@ jdk:
 # Cache Ivy stuff.
 cache:
   directories:
-    - $HOME/.ivy2
-
-# Install tool chain.
-install:
-  - src/etc/travis/install-ant-libs.sh
+    - $HOME/.m2
 
 # Execute unit tests.
 script:
@@ -24,6 +20,6 @@ jobs:
   include:
     - stage: deploy
       jdk: openjdk8
-      if: tag is present or branch = develop
+      if: tag is present
       script:
         - src/etc/travis/deploy-artifacts.sh

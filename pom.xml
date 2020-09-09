@@ -1,0 +1,227 @@
+<project>
+    <modelVersion>4.0.0</modelVersion>
+
+    <!-- Maven Coordinates. -->
+    <groupId>com.nepherte</groupId>
+    <artifactId>bing-proxy</artifactId>
+    <version>1.0.0</version>
+    <packaging>war</packaging>
+
+    <!-- General.-->
+    <name>Bing Proxy</name>
+    <description>Proxy servlet for Bing Maps imagery metadata.</description>
+    <url>https://github.com/Nepherte/bing-proxy</url>
+    <inceptionYear>2019</inceptionYear>
+
+    <!-- Licensing. -->
+    <licenses>
+        <license>
+            <name>Apache License, Version 2.0</name>
+            <url>https://www.apache.org/licenses/LICENSE-2.0</url>
+        </license>
+    </licenses>
+
+    <!-- Developers. -->
+    <developers>
+        <developer>
+            <name>Bart Verhoeven</name>
+            <email>bartverhoeven@live.com</email>
+        </developer>
+    </developers>
+
+    <!-- Version Control. -->
+    <scm>
+        <url>https://github.com/Nepherte/commons-cli</url>
+        <connection>scm:git:https://github.com/Nepherte/bing-proxy</connection>
+        <developerConnection>scm:git:git@github.com:Nepherte/bing-proxy</developerConnection>
+        <tag>1.0.0</tag>
+    </scm>
+
+    <!-- Issue Management. -->
+    <issueManagement>
+        <system>Github</system>
+        <url>https://github.com/Nepherte/commons-cli/issues</url>
+    </issueManagement>
+
+    <!-- Continuous Integration. -->
+    <ciManagement>
+        <system>Travis CI</system>
+        <url>https://travis-ci.com/Nepherte/bing-proxy</url>
+    </ciManagement>
+
+    <!-- Distribution Management. -->
+    <distributionManagement>
+        <repository>
+            <id>github</id>
+            <name>GitHub Packages</name>
+            <url>https://maven.pkg.github.com/Nepherte/bing-proxy</url>
+        </repository>
+    </distributionManagement>
+
+    <properties>
+        <!-- File encoding. -->
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
+
+        <!-- Compiler settings. -->
+        <maven.compiler.source>8</maven.compiler.source>
+        <maven.compiler.target>8</maven.compiler.target>
+
+        <!-- Version rules for dependencies. -->
+        <maven.version.rules>
+            file:///${project.basedir}/src/etc/maven/rules.xml
+        </maven.version.rules>
+    </properties>
+
+    <dependencies>
+      <!-- Compile dependencies. -->
+
+      <!-- Test dependencies. -->
+      <dependency>
+        <groupId>org.junit.jupiter</groupId>
+        <artifactId>junit-jupiter</artifactId>
+        <version>5.6.0</version>
+        <scope>test</scope>
+      </dependency>
+
+      <dependency>
+        <groupId>org.hamcrest</groupId>
+        <artifactId>hamcrest</artifactId>
+        <version>2.2</version>
+        <scope>test</scope>
+      </dependency>
+
+      <dependency>
+        <groupId>org.mockito</groupId>
+        <artifactId>mockito-core</artifactId>
+        <version>3.3.0</version>
+        <scope>test</scope>
+      </dependency>
+
+      <!-- Provided dependencies. -->
+      <dependency>
+        <groupId>javax.servlet</groupId>
+        <artifactId>javax.servlet-api</artifactId>
+        <version>3.1.0</version>
+        <scope>provided</scope>
+      </dependency>
+    </dependencies>
+
+  <build>
+    <plugins>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-clean-plugin</artifactId>
+        <version>3.1.0</version>
+      </plugin>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-compiler-plugin</artifactId>
+        <version>3.8.1</version>
+      </plugin>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-deploy-plugin</artifactId>
+        <version>3.0.0-M1</version>
+      </plugin>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-dependency-plugin</artifactId>
+        <version>3.1.1</version>
+      </plugin>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-enforcer-plugin</artifactId>
+        <version>1.4.1</version>
+        <executions>
+          <execution>
+            <id>enforce-maven</id>
+            <goals>
+              <goal>enforce</goal>
+            </goals>
+            <configuration>
+              <rules>
+                <requireMavenVersion>
+                  <version>[3.6,4)</version>
+                </requireMavenVersion>
+              </rules>
+            </configuration>
+          </execution>
+        </executions>
+      </plugin>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-install-plugin</artifactId>
+        <version>2.5.2</version>
+      </plugin>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-javadoc-plugin</artifactId>
+        <version>3.2.0</version>
+        <configuration>
+          <doclint>none</doclint>
+          <links>
+            <link>https://docs.oracle.com/javaee/7/api/</link>
+          </links>
+        </configuration>
+        <executions>
+          <execution>
+            <id>attach-javadocs</id>
+            <goals>
+              <goal>jar</goal>
+            </goals>
+          </execution>
+        </executions>
+      </plugin>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-war-plugin</artifactId>
+        <version>3.3.1</version>
+        <configuration>
+          <archiveClasses>true</archiveClasses>
+        </configuration>
+      </plugin>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-release-plugin</artifactId>
+        <version>2.5.3</version>
+      </plugin>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-resources-plugin</artifactId>
+        <version>3.1.0</version>
+      </plugin>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-site-plugin</artifactId>
+        <version>3.8.2</version>
+      </plugin>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-source-plugin</artifactId>
+        <version>3.2.1</version>
+        <executions>
+          <execution>
+            <id>attach-sources</id>
+            <goals>
+              <goal>jar</goal>
+            </goals>
+          </execution>
+        </executions>
+      </plugin>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-surefire-plugin</artifactId>
+        <version>2.22.2</version>
+        <configuration>
+          <argLine>${test.vm.args}</argLine>
+        </configuration>
+      </plugin>
+      <plugin>
+        <groupId>org.codehaus.mojo</groupId>
+        <artifactId>versions-maven-plugin</artifactId>
+        <version>2.7</version>
+      </plugin>
+    </plugins>
+  </build>
+</project>
