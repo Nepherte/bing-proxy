@@ -6,7 +6,7 @@
 
   <servlet>
     <servlet-name>bing-proxy</servlet-name>
-    <servlet-class>be.nepherte.bingmaps.BingProxyServlet</servlet-class>
+    <servlet-class>com.nepherte.bingmaps.BingProxyServlet</servlet-class>
 
     <init-param>
       <param-name>url</param-name>

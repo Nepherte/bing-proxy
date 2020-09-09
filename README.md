@@ -48,7 +48,7 @@ in your web deployment descriptor (`web.xml`). Failing to do so will result in a
 ```xml
 <servlet>
   <servlet-name>bing-proxy</servlet-name>
-  <servlet-class>be.nepherte.bingmaps.BingProxyServlet</servlet-class>
+  <servlet-class>com.nepherte.bingmaps.BingProxyServlet</servlet-class>
 
   <init-param>
     <param-name>url</param-name>
